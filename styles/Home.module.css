@@ -1,0 +1,55 @@
+.home {
+  min-height: 100vh;
+  padding: 1rem;
+  display: flex;
+  flex-flow: column;
+}
+.logo {
+  display: flex;
+  flex: 0 1 auto;
+}
+.yellow {
+  color: hsl(60, 100%, 60%);
+}
+.btn {
+  background: linear-gradient(100deg, hsl(40, 100%, 60%), hsl(20, 100%, 60%));
+  padding: 1rem;
+  font-size: 1.5rem;
+  text-transform: none;
+  margin-top: 2rem;
+}
+.home section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  flex: 1 1 auto;
+}
+.home section h1 {
+  font-size: 4rem;
+}
+.home section .lightId {
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12.5px;
+  display: flex;
+  color: black;
+  flex-direction: column;
+}
+.home section code {
+  padding: 2rem;
+  border-radius: 12.5px;
+  font-size: 2rem;
+  background: hsl(45deg 100% 10%);
+  color: yellow;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.home section h2 {
+  border-radius: 12.5px;
+  font-size: 1rem;
+  text-align: center;
+  font-family: monospace;
+}

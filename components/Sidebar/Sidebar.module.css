@@ -1,0 +1,69 @@
+.container {
+  flex: 3;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.container::-webkit-scrollbar {
+  display: none;
+}
+.header {
+  display: flex;
+  position: sticky;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.header .leftHandle {
+  display: flex;
+  align-items: center;
+}
+.userAvatar {
+  cursor: pointer;
+  margin-left: 10px;
+}
+.userAvatar:hover {
+  opacity: 0.8;
+}
+.iconActions {
+  display: flex;
+}
+.headerIcons {
+  fill: hsl(60, 100%, 50%);
+}
+.searchBar {
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+.wideBtn {
+  position: static;
+  width: 100%;
+  border-radius: 0;
+  background-color: hsl(60, 100%, 50%);
+}
+.wideBtn:hover {
+  opacity: 0.8;
+  background-color: hsl(60, 100%, 50%);
+}
+.dropdown {
+  position: absolute;
+  right: 0;
+  z-index: 3;
+  border: 1px solid;
+  width: max-content;
+  padding: 1rem;
+  background: white;
+  margin-top: 1rem;
+}
+.dropdown button {
+  display: block;
+  margin: 1rem 0;
+}
+.chatSection {
+  margin-top: 2rem;
+}

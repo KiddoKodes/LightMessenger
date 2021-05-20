@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+.container .sidebar {
+  flex: 2;
+  min-width: 40vw;
+}
+.container > main {
+  flex: 6;
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.container main::-webkit-scrollbar {
+  display: none;
+}
+@media only screen and (max-width: 700px) {
+  .container .sidebar {
+    display: none;
+  }
+}

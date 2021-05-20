@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+.login {
+  height: 80vh;
+  width: max-content;
+  padding: 4rem;
+  max-width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: inset 1px 1px 20px white;
+  border-radius: 25px;
+}
+.loginHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.loginHead h1 {
+  color: white;
+  width: max-content;
+}
+.loginHead h1 span {
+  color: hsl(60, 100%, 50%);
+}
+.loginBtn {
+  color: hsl(0, 10%, 10%);
+  background: linear-gradient(100deg, hsl(60, 100%, 50%), hsl(40, 100%, 50%));
+  font-family: "Poppins";
+}

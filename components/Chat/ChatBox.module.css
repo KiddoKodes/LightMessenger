@@ -1,0 +1,16 @@
+.chat {
+  display: flex;
+  align-items: center;
+  justify-content: initial;
+  padding: 1rem;
+  color: white;
+  background: hsl(0, 0%, 12%);
+  transition: 0.5s ease;
+  cursor: pointer;
+}
+.chat:hover {
+  background: hsl(0, 0%, 20%);
+}
+.chat * {
+  margin: 0 1rem;
+}

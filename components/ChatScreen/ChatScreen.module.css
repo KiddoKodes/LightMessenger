@@ -1,0 +1,68 @@
+.container {
+  background: hsl(0, 0%, 20%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.container header {
+  position: sticky;
+  width: 100%;
+  z-index: 999;
+  top: 0;
+  background: hsl(0, 0%, 10%);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  height: 10vh;
+}
+.container header .recipientPicture {
+  margin-left: 15px;
+}
+.container header .headerInfo {
+  margin-left: 1rem;
+  font-size: 12px;
+  flex: 1;
+}
+.container header .headerInfo * {
+  margin: 0;
+}
+
+.container header svg {
+  fill: white;
+}
+.container main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+.container main div {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+.container main div::-webkit-scrollbar {
+  display: none;
+}
+.container .inputContainer {
+  background: hsl(0, 0%, 10%);
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  height: 10vh;
+  align-items: center;
+}
+.container .inputContainer svg {
+  fill: white;
+}
+.container .inputContainer * {
+  flex: 1;
+}
+.container .inputContainer input {
+  padding: 0.5rem;
+  outline: none;
+  border: none;
+  flex: 10;
+  background: hsl(0, 0%, 20%);
+  color: white;
+}
