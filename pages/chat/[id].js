@@ -4,14 +4,16 @@ import ChatScreen from "../../components/ChatScreen";
 import Sidebar from "../../components/Sidebar";
 import { auth, db } from "../../firebase";
 import styles from "./chat.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getRecipientDetails from "../../utils/getRecipientDetails";
 const RenderSingleChat = ({ chat, messages }) => {
   const [recipient, setRecipient] = useState({});
   const [user] = useAuthState(auth);
-  getRecipientDetails(chat.users, user).then((res) => {
-    setRecipient(res);
-  });
+  useEffect(() => {
+    getRecipientDetails(chat.users, user).then((res) => {
+      setRecipient(res);
+    });
+  }, []);
   return (
     <div className={styles.container}>
       <Head>

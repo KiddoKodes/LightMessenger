@@ -11,11 +11,10 @@ import { auth, db } from "../../firebase";
 import { useRouter } from "next/router";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Message from "../Message";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import firebase from "firebase";
 import getRecipientDetails from "../../utils/getRecipientDetails";
 import TimeAgo from "timeago-react";
-import { route } from "next/dist/next-server/server/router";
 const ChatScreen = ({ chat, messages }) => {
   const [input, setInput] = useState("");
   const [recipient, setRecipient] = useState({});
@@ -91,15 +90,15 @@ const ChatScreen = ({ chat, messages }) => {
         />
         <Avatar
           className={styles.recipientPicture}
-          src={recipient.photoURL}
-          alt={recipient.name}
+          src={recipient?.photoURL}
+          alt={recipient?.name}
         />
         <div className={styles.headerInfo}>
-          <h3>{recipient.name}</h3>
+          <h3>{recipient?.name}</h3>
           <span>
             Last Active :{" "}
             {recipient?.lastSeen?.toDate() ? (
-              <TimeAgo datetime={recipient.lastSeen?.toDate()} />
+              <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
             ) : (
               "Unavailable"
             )}
@@ -115,10 +114,8 @@ const ChatScreen = ({ chat, messages }) => {
         </div>
       </header>
       <main>
-        <div>
-          {showMessages()}
-          <div ref={endOfMessages}></div>
-        </div>
+        <div>{showMessages()}</div>
+        <div ref={endOfMessages}></div>
       </main>
       <div className={styles.inputContainer}>
         <IconButton>

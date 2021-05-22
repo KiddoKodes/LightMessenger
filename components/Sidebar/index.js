@@ -12,7 +12,7 @@ import styles from "./Sidebar.module.css";
 import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import checkIfLightIdExists from "../../utils/checkIfLightIDExists";
+import checkIfUserExists from "../../utils/checkIfUserExists";
 import ChatBox from "../Chat";
 import { useRouter } from "next/router";
 const Sidebar = (props) => {
@@ -20,13 +20,8 @@ const Sidebar = (props) => {
   const router = useRouter();
   const userChatsReference = db
     .collection("chats")
-    .where(
-      "users",
-      "array-contains",
-      `${user.email.split("@")[0].substring(0, 5).toUpperCase()}${user.uid
-        .substring(0, 5)
-        .toUpperCase()}`
-    );
+    .where("users", "array-contains", `${user.email}`);
+  const [modeOfNewChat, setModeOfNewChat] = useState("LightID");
   const [chatsSnapshot] = useCollection(userChatsReference);
   const [chatsSnap, setChatSnap] = useState(chatsSnapshot);
   useEffect(() => setChatSnap(chatsSnapshot), [chatsSnapshot]);
@@ -50,56 +45,95 @@ const Sidebar = (props) => {
   };
   const createChat = (e) => {
     e.preventDefault();
-    if (
-      !newChatId.id ||
-      newChatId.id.length !== 10 ||
-      newChatId.id !== newChatId.id.toUpperCase()
-    )
-      return setNewChatId({ ...newChatId, error: "Invalid Light ID" });
+    if (modeOfNewChat === "EmailID") {
+      if (!newChatId.id || newChatId.id.split("@")[1] !== "gmail.com")
+        return setNewChatId({
+          ...newChatId,
+          error:
+            "Provider of this email id is not gmail. So you cannot add it.",
+        });
+    } else if (modeOfNewChat === "LightID") {
+      if (
+        !newChatId.id ||
+        newChatId.id.length !== 10 ||
+        newChatId.id !== newChatId.id.toUpperCase()
+      )
+        return setNewChatId({ ...newChatId, error: "Invalid Light ID" });
+    }
+
     db.collection("users")
       .doc(user.uid)
       .get()
       .then((res) => {
-        if (newChatId.id === res.data().lightID) {
-          return setNewChatId({
-            ...newChatId,
-            error: "You cannot chat with yourself",
-          });
-        }
-        if (checkIfChatAlreadyExists(newChatId.id)) {
-          console.log(checkIfChatAlreadyExists(newChatId.id));
-          return setNewChatId({
-            ...newChatId,
-            error: "Chat Already Exists",
-          });
-        }
-        checkIfLightIdExists(newChatId.id).then((res) => {
-          setExists(res);
-        });
-        console.log(isExists);
-        if (isExists) {
-          db.collection("chats")
-            .add({
-              users: [res.data().lightID, newChatId.id],
-            })
-            .then(() => {
-              dialogToggler();
+        if (modeOfNewChat === "EmailID") {
+          if (newChatId.id === res.data().email) {
+            return setNewChatId({
+              ...newChatId,
+              error: "You cannot chat with yourself",
             });
+          }
         } else {
-          return setNewChatId({
-            ...newChatId,
-            error: "There is no user with given lightID",
-          });
+          if (newChatId.id === res.data().lightID) {
+            return setNewChatId({
+              ...newChatId,
+              error: "You cannot chat with yourself",
+            });
+          }
+        }
+        if (modeOfNewChat === "EmailID") {
+          if (checkIfChatAlreadyExists(newChatId.id)) {
+            return setNewChatId({
+              ...newChatId,
+              error: "Chat Already Exists",
+            });
+          } else {
+            db.collection("chats")
+              .add({
+                users: [res.data().email, newChatId.id],
+              })
+              .then(() => {
+                dialogToggler();
+              });
+          }
+        } else {
+          db.collection("users")
+            .where("lightID", "==", newChatId.id)
+            .get()
+            .then((response) => {
+              if (checkIfChatAlreadyExists(response.docs[0].data().email)) {
+                return setNewChatId({
+                  ...newChatId,
+                  error: "Chat Already Exists",
+                });
+              }
+              checkIfUserExists(newChatId.id, modeOfNewChat).then((res) => {
+                setExists(res);
+              });
+              if (isExists) {
+                db.collection("chats")
+                  .add({
+                    users: [res.data().email, response.docs[0].data().email],
+                  })
+                  .then(() => {
+                    dialogToggler();
+                  });
+              } else {
+                return setNewChatId({
+                  ...newChatId,
+                  error: `There is no user with given ${modeOfNewChat}`,
+                });
+              }
+            });
         }
       })
       .catch((e) => {
         return setNewChatId({ ...newChatId, error: "Something went wrong.." });
       });
   };
-  const checkIfChatAlreadyExists = (recipientEmail) => {
+  const checkIfChatAlreadyExists = (recipientEmailID) => {
     chatsSnapshot?.docs.find((chat) => {
       chat.data().users.find((user) => {
-        if (user === recipientEmail) return true;
+        if (user === recipientEmailID) return true;
         return false;
       });
     });
@@ -159,15 +193,42 @@ const Sidebar = (props) => {
           ""
         )}
         <form>
-          <input
-            placeholder="Light-ID Of Your Friend"
-            value={newChatId.id}
-            onChange={(e) => setNewChatId({ id: e.target.value })}
-          />
+          {modeOfNewChat === "LightID" ? (
+            <input
+              placeholder="Light-ID Of Your Friend"
+              value={newChatId.id}
+              onChange={(e) => setNewChatId({ id: e.target.value })}
+            />
+          ) : (
+            <input
+              placeholder="Email-ID Of Your Friend"
+              type="email"
+              value={newChatId.id}
+              onChange={(e) => setNewChatId({ id: e.target.value })}
+            />
+          )}
+
           <Button variant="contained" onClick={createChat} type="submit">
             Go
           </Button>
         </form>
+        <div
+          onClick={() =>
+            modeOfNewChat === "LightID"
+              ? setModeOfNewChat("EmailID")
+              : setModeOfNewChat("LightID")
+          }
+          style={{
+            display: "block",
+            marginBottom: "2rem",
+            color: "yellow",
+            cursor: "pointer",
+          }}
+        >
+          {modeOfNewChat === "LightID"
+            ? "Start a new chat with email"
+            : "Start a new chat with lightID"}
+        </div>
       </div>
       <div className={styles.chatSection}>
         {chatsSnap?.docs.map((chat, index) => (

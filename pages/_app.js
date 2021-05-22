@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }) {
         .set(
           {
             name: user.displayName,
+            email: user.email,
             lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
             photoURL: user.photoURL,
             lightID: `${user.email

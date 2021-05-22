@@ -1,5 +1,5 @@
 import { Avatar, StylesProvider } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase";
 import getRecipientDetails from "../../utils/getRecipientDetails";
@@ -12,9 +12,11 @@ const ChatBox = ({ id, users }) => {
     router.push(`/chat/${id}`);
   };
   const [userLoggedIn] = useAuthState(auth);
-  getRecipientDetails(users, userLoggedIn).then((res) => {
-    setRecipient(res);
-  });
+  useEffect(() => {
+    getRecipientDetails(users, userLoggedIn).then((res) => {
+      setRecipient(res);
+    });
+  }, []);
   return (
     <div className={styles.chat} onClick={viewChat}>
       <Avatar src={recipient?.photoURL} alt={recipient?.name} />
