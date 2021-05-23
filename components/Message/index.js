@@ -29,7 +29,7 @@ const styles = {
     padding: "1rem 1rem",
     borderRadius: "10px",
     margin: "1rem",
-    minWidth: "60px",
+    minWidth: "120px",
     position: "relative",
     textAlign: "right",
     wordBreak: "break-all",

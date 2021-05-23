@@ -15,15 +15,25 @@ import { useEffect, useRef, useState } from "react";
 import firebase from "firebase";
 import getRecipientDetails from "../../utils/getRecipientDetails";
 import TimeAgo from "timeago-react";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 const ChatScreen = ({ chat, messages }) => {
   const [input, setInput] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
   const [recipient, setRecipient] = useState({});
   const [user] = useAuthState(auth);
-  getRecipientDetails(chat.users, user).then((res) => {
-    setRecipient(res);
-  });
+  useEffect(() => {
+    getRecipientDetails(chat.users, user).then((res) => {
+      setRecipient(res);
+    });
+  }, []);
+  useEffect(() => {
+    if (showEmoji) {
+      document.getElementById("PickerEnd").scrollIntoView();
+    }
+  }, [showEmoji]);
+
   const router = useRouter();
-  const endOfMessages = useRef(null);
   const [messagesSnap] = useCollection(
     db
       .collection("chats")
@@ -31,12 +41,7 @@ const ChatScreen = ({ chat, messages }) => {
       .collection("messages")
       .orderBy("timestamp", "asc")
   );
-  const scrollToBottom = () => {
-    endOfMessages.current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
+
   const shallowBack = () => {
     router.push("/chat", undefined, { shallow: true });
   };
@@ -70,14 +75,20 @@ const ChatScreen = ({ chat, messages }) => {
       },
       { merge: true }
     );
-    db.collection("chats").doc(router.query.id).collection("messages").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      message: input,
-      user: user.email,
-      photoURL: user.photoURL,
-    });
-    setInput("");
-    scrollToBottom();
+    db.collection("chats")
+      .doc(router.query.id)
+      .collection("messages")
+      .add({
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        message: input,
+        user: user.email,
+        photoURL: user.photoURL,
+      })
+      .then(() => {
+        setInput("");
+        document.getElementById("msgBox").scrollTop =
+          document.getElementById("endOfmsg").offsetTop;
+      });
   };
   return (
     <div className={styles.container} id="chatBox">
@@ -114,11 +125,20 @@ const ChatScreen = ({ chat, messages }) => {
         </div>
       </header>
       <main>
-        <div>{showMessages()}</div>
-        <div ref={endOfMessages}></div>
+        <div id="msgBox">
+          {showMessages()}
+          <div
+            id="endOfmsg"
+            style={{ position: "relative", bottom: "0" }}
+          ></div>
+        </div>
       </main>
       <div className={styles.inputContainer}>
-        <IconButton>
+        <IconButton
+          onClick={() => {
+            setShowEmoji(!showEmoji);
+          }}
+        >
           <InsertEmoticonIcon />
         </IconButton>
         <input
@@ -131,13 +151,28 @@ const ChatScreen = ({ chat, messages }) => {
             }
           }}
         />
-        <IconButton>
+        {/* <IconButton>
           <MicIcon />
-        </IconButton>
-        <IconButton type="submit" onClick={sendMessage}>
+        </IconButton> */}
+        <IconButton disabled={input === ""} type="submit" onClick={sendMessage}>
           <SendRoundedIcon />
         </IconButton>
       </div>
+      <div>
+        <Picker
+          set="apple"
+          onSelect={(e) => setInput(input + e.native)}
+          style={
+            showEmoji
+              ? { display: "block", width: "100%" }
+              : { display: "none" }
+          }
+          emojiSize={32}
+          theme="dark"
+          id="Emoji"
+        />
+      </div>
+      <div id="PickerEnd"></div>
     </div>
   );
 };

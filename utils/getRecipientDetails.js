@@ -12,6 +12,6 @@ const getRecipientDetails = async (users, userLoggedIn) => {
     .get();
   return recipientDetails.docs.length > 0
     ? recipientDetails.docs[0].data()
-    : null;
+    : { email: recipient };
 };
 export default getRecipientDetails;

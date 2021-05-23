@@ -20,9 +20,9 @@ const Sidebar = (props) => {
   const router = useRouter();
   const userChatsReference = db
     .collection("chats")
-    .where("users", "array-contains", `${user.email}`);
-  const [modeOfNewChat, setModeOfNewChat] = useState("LightID");
+    .where("users", "array-contains", user.email);
   const [chatsSnapshot] = useCollection(userChatsReference);
+  const [modeOfNewChat, setModeOfNewChat] = useState("LightID");
   const [chatsSnap, setChatSnap] = useState(chatsSnapshot);
   useEffect(() => setChatSnap(chatsSnapshot), [chatsSnapshot]);
   const dialogToggler = () => {
@@ -81,6 +81,7 @@ const Sidebar = (props) => {
           }
         }
         if (modeOfNewChat === "EmailID") {
+          console.log(checkIfChatAlreadyExists(newChatId.id));
           if (checkIfChatAlreadyExists(newChatId.id)) {
             return setNewChatId({
               ...newChatId,
@@ -100,6 +101,9 @@ const Sidebar = (props) => {
             .where("lightID", "==", newChatId.id)
             .get()
             .then((response) => {
+              console.log(
+                checkIfChatAlreadyExists(response.docs[0].data().email)
+              );
               if (checkIfChatAlreadyExists(response.docs[0].data().email)) {
                 return setNewChatId({
                   ...newChatId,
@@ -131,12 +135,16 @@ const Sidebar = (props) => {
       });
   };
   const checkIfChatAlreadyExists = (recipientEmailID) => {
+    var isAlreadyExists = null;
     chatsSnapshot?.docs.find((chat) => {
       chat.data().users.find((user) => {
-        if (user === recipientEmailID) return true;
-        return false;
+        if (user === recipientEmailID) {
+          console.log(user, recipientEmailID);
+          isAlreadyExists = true;
+        } else isAlreadyExists = false;
       });
     });
+    return isAlreadyExists;
   };
   const signOut = () => {
     auth.signOut();

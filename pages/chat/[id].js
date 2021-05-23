@@ -20,7 +20,7 @@ const RenderSingleChat = ({ chat, messages }) => {
         <title>Chat with {recipient?.name}</title>
       </Head>
       <Sidebar className={styles.sidebar} />
-      <main>
+      <main id="mainBox">
         <ChatScreen chat={chat} messages={messages} />
       </main>
     </div>

@@ -20,7 +20,7 @@ const ChatBox = ({ id, users }) => {
   return (
     <div className={styles.chat} onClick={viewChat}>
       <Avatar src={recipient?.photoURL} alt={recipient?.name} />
-      <p>{recipient?.name}</p>
+      <p>{recipient.name ? recipient?.name : recipient?.email}</p>
     </div>
   );
 };
