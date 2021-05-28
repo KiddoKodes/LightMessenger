@@ -22,15 +22,22 @@ const ChatScreen = ({ chat, messages }) => {
   const [showEmoji, setShowEmoji] = useState(false);
   const [recipient, setRecipient] = useState({});
   const [user] = useAuthState(auth);
+  var unmounted = false;
   useEffect(() => {
-    getRecipientDetails(chat.users, user).then((res) => {
-      setRecipient(res);
-    });
+    if (!unmounted) {
+      getRecipientDetails(chat.users, user).then((res) => {
+        setRecipient(res);
+      });
+    }
+    return () => (unmounted = true);
   }, []);
   useEffect(() => {
-    if (showEmoji) {
-      document.getElementById("PickerEnd").scrollIntoView();
+    if (!unmounted) {
+      if (showEmoji) {
+        document.getElementById("PickerEnd").scrollIntoView();
+      }
     }
+    return () => (unmounted = true);
   }, [showEmoji]);
 
   const router = useRouter();

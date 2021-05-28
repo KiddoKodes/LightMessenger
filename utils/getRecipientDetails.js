@@ -10,6 +10,7 @@ const getRecipientDetails = async (users, userLoggedIn) => {
     .collection("users")
     .where("email", "==", recipient)
     .get();
+  console.log(recipientDetails);
   return recipientDetails.docs.length > 0
     ? recipientDetails.docs[0].data()
     : { email: recipient };

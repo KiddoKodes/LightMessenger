@@ -6,13 +6,28 @@ import { auth, db } from "../../firebase";
 import styles from "./chat.module.css";
 import { useEffect, useState } from "react";
 import getRecipientDetails from "../../utils/getRecipientDetails";
+import { useRouter } from "next/router";
 const RenderSingleChat = ({ chat, messages }) => {
-  const [recipient, setRecipient] = useState({});
   const [user] = useAuthState(auth);
-  useEffect(() => {
-    getRecipientDetails(chat.users, user).then((res) => {
-      setRecipient(res);
+  const router = useRouter();
+  const CanAccessIt = () => {
+    var canAccess = false;
+    chat.users.find((_user) => {
+      _user === user.email ? (canAccess = true) : (canAccess = false);
     });
+    return canAccess;
+  };
+  console.log(CanAccessIt());
+  if (!CanAccessIt()) router.push("/404");
+  const [recipient, setRecipient] = useState({});
+  var unmounted = false;
+  useEffect(() => {
+    if (!unmounted) {
+      getRecipientDetails(chat.users, user).then((res) => {
+        setRecipient(res);
+      });
+    }
+    return () => (unmounted = true);
   }, []);
   return (
     <div className={styles.container}>
@@ -50,6 +65,7 @@ export async function getServerSideProps(context) {
   };
   return {
     props: {
+      // id: JSON.stringify(await ref.get()),
       messages: JSON.stringify(messages),
       chat: chat,
     },
