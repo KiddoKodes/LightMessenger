@@ -81,7 +81,7 @@ const Sidebar = (props) => {
           }
         }
         if (modeOfNewChat === "EmailID") {
-          console.log(checkIfChatAlreadyExists(newChatId.id));
+          
           if (checkIfChatAlreadyExists(newChatId.id)) {
             return setNewChatId({
               ...newChatId,
@@ -101,7 +101,7 @@ const Sidebar = (props) => {
             .where("lightID", "==", newChatId.id)
             .get()
             .then((response) => {
-              console.log(
+              
                 checkIfChatAlreadyExists(response.docs[0].data().email)
               );
               if (checkIfChatAlreadyExists(response.docs[0].data().email)) {
@@ -139,7 +139,7 @@ const Sidebar = (props) => {
     chatsSnapshot?.docs.find((chat) => {
       chat.data().users.find((user) => {
         if (user === recipientEmailID) {
-          console.log(user, recipientEmailID);
+          
           isAlreadyExists = true;
         } else isAlreadyExists = false;
       });

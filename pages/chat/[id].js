@@ -17,7 +17,7 @@ const RenderSingleChat = ({ chat, messages }) => {
     });
     return canAccess;
   };
-  console.log(CanAccessIt());
+
   if (!CanAccessIt()) router.push("/404");
   const [recipient, setRecipient] = useState({});
   var unmounted = false;
