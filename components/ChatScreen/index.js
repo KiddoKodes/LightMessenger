@@ -23,6 +23,7 @@ const ChatScreen = ({ chat, messages }) => {
   const [recipient, setRecipient] = useState({});
   const [user] = useAuthState(auth);
   var unmounted = false;
+  const router = useRouter();
   useEffect(() => {
     if (!unmounted) {
       getRecipientDetails(chat.users, user).then((res) => {
@@ -30,7 +31,7 @@ const ChatScreen = ({ chat, messages }) => {
       });
     }
     return () => (unmounted = true);
-  }, []);
+  }, [router.query.id]);
   useEffect(() => {
     if (!unmounted) {
       if (showEmoji) {
@@ -40,7 +41,6 @@ const ChatScreen = ({ chat, messages }) => {
     return () => (unmounted = true);
   }, [showEmoji]);
 
-  const router = useRouter();
   const [messagesSnap] = useCollection(
     db
       .collection("chats")

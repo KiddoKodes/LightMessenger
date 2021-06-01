@@ -13,7 +13,11 @@ const RenderSingleChat = ({ chat, messages }) => {
   const CanAccessIt = () => {
     var canAccess = false;
     chat.users.find((_user) => {
-      _user === user.email ? (canAccess = true) : (canAccess = false);
+      if (_user === user.email) {
+        return (canAccess = true);
+      } else {
+        return (canAccess = false);
+      }
     });
     return canAccess;
   };
@@ -28,7 +32,7 @@ const RenderSingleChat = ({ chat, messages }) => {
       });
     }
     return () => (unmounted = true);
-  }, []);
+  }, [router.query.id]);
   return (
     <div className={styles.container}>
       <Head>
