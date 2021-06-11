@@ -1,3 +1,15 @@
+## Light Messenger
+![image](https://media.giphy.com/media/S5lhKnrZw0kzKNVU17/giphy.gif) 
+ ![image](https://media.giphy.com/media/MlfbMiU2UMq3u/giphy.gif)
+ ![image](https://fiverr-res.cloudinary.com/images/q_auto,f_auto/gigs3/174951791/original/61e5c51b610dc8df9afed559520bb64925d4d87c/create-a-full-website-for-you.png) 
+
+Next js based chat app with firebase.
+
+
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
