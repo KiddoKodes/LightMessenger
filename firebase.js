@@ -1,12 +1,12 @@
 import firebase from "firebase";
 const firebaseConfig = {
-  apiKey: "AIzaSyAZs3RzVWPFjxV8BcdXq2JvgzBK7jCi5Ak",
-  authDomain: "light-messenger-2d925.firebaseapp.com",
-  projectId: "light-messenger-2d925",
-  storageBucket: "light-messenger-2d925.appspot.com",
-  messagingSenderId: "858341716393",
-  appId: "1:858341716393:web:6df1e151be1cb895e6d4b8",
-  measurementId: "G-7N5VZGNFN9",
+  apiKey: process.env.API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.PROJ_ID,
+  storageBucket: process.env.STORAGE_BUCKET,
+  messagingSenderId: process.env.MSG_ID,
+  appId: process.env.APP_ID,
+  measurementId: process.env.MEASURE_ID,
 };
 
 const app = !firebase.apps.length
